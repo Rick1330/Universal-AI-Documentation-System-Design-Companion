@@ -1,16 +1,21 @@
 from fastapi import FastAPI
-from ..app.api.v1.router import api_router
-from ..app.core.config import settings
-from ..app.db.session import engine #, SessionLocal
-from ..app.db import base as db_base # To create tables
-from ..app.core.logging_config import setup_logging # Import the setup function
+from .api.v1.router import api_router # Corrected import
+from .core.config import settings # Corrected import
+from .db.session import engine # Corrected import
+from .db import base as db_base # Corrected import
+from .core.logging_config import setup_logging, logger # Corrected import, ensure logger is available
+import os # Import os
 
-# Create database tables
+# Create database tables - only if not running under pytest
 # In a production setup with Alembic, this would be handled by migrations
-db_base.Base.metadata.create_all(bind=engine)
+if os.getenv("RUNNING_PYTEST") != "true":
+    logger.info("Application not running under pytest, creating database tables if they don't exist.")
+    db_base.Base.metadata.create_all(bind=engine)
+else:
+    logger.info("Application running under pytest, skipping automatic table creation in main.py.")
 
-# Setup logging
-logger = setup_logging() # Initialize and get the logger instance
+# Setup logging - logger is now imported from logging_config
+# logger = setup_logging() # This is already done in logging_config.py and logger is imported
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,12 +28,12 @@ async def startup_event():
     # You can add other startup logic here, like connecting to a message broker if not handled by Celery worker
     # For example, ensure MinIO bucket exists (though file_handler does this on first use)
     try:
-        from ..app.services.file_handler import client as minio_client, settings as minio_settings
-        if not minio_client.bucket_exists(minio_settings.MINIO_BUCKET_NAME):
-            minio_client.make_bucket(minio_settings.MINIO_BUCKET_NAME)
-            logger.info(f"MinIO bucket 	ható{minio_settings.MINIO_BUCKET_NAME}" created.")
+        from .services.file_handler import client as minio_client # Corrected import
+        if not minio_client.bucket_exists(settings.MINIO_BUCKET_NAME):
+            minio_client.make_bucket(settings.MINIO_BUCKET_NAME)
+            logger.info(f"MinIO bucket 	'{settings.MINIO_BUCKET_NAME}	' created.")
         else:
-            logger.info(f"MinIO bucket 	ható{minio_settings.MINIO_BUCKET_NAME}" already exists.")
+            logger.info(f"MinIO bucket 	'{settings.MINIO_BUCKET_NAME}	' already exists.")
     except Exception as e:
         logger.error(f"Error checking/creating MinIO bucket during startup: {e}")
 

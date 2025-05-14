@@ -1,1 +1,44 @@
-Placeholder for GitHub Actions workflow
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.11' # Should match project's Python version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+        pip install pytest pytest-cov # Ensure testing tools are installed
+
+    - name: Run tests with coverage
+      run: |
+        make test
+      working-directory: ./ # Assuming Makefile is in the root of universal_data_extractor_analyzer_impl
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-reports
+        path: |
+          backend/coverage.xml
+          backend/cov_html/
+      # Optionally, only upload if the previous step was successful
+      if: success() || failure()
+

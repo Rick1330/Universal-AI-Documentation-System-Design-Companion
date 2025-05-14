@@ -2,16 +2,16 @@ from sqlalchemy.orm import Session
 from typing import Callable
 import os
 
-from ....app import crud
-from ....app.db import models
-from ....app.core.config import settings
-from ....app.services import file_handler # Import file_handler
-from .ai_agents import extractor_agent, cleaner_agent, analyzer_agent # Import the actual agents
+from app import crud # Corrected import
+from app.db import models # Corrected import
+from app.core.config import settings # Corrected import
+from app.services import file_handler # Corrected import
+from app.services.ai_agents import extractor_agent, cleaner_agent, analyzer_agent # Corrected import
 
-# from ...workers.celery_app import celery_app # Placeholder for Celery integration
+# from app.workers.celery_app import celery_app # Placeholder for Celery integration
 
 # @celery_app.task # This would be uncommented if Celery is fully set up
-def process_file_job(job_id: int, db_provider: Callable[[], Session]):
+async def process_file_job(job_id: int, db_provider: Callable[[], Session]):
     """
     Background task to process a file associated with a job.
     This function will be called by Celery or a similar background task runner.
