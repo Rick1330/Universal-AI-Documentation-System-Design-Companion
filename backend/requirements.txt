@@ -8,3 +8,13 @@ redis
 minio
 requests
 python-multipart
+pydantic-settings # Added for Pydantic v2 BaseSettings
+openai # Added for AI agent interactions
+
+# Testing
+pytest
+pytest-cov
+pytest-asyncio
+httpx
+respx # For mocking HTTP requests if needed for external APIs like OpenAI
+

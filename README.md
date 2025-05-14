@@ -42,3 +42,54 @@ While this document outlines the design, a typical user interaction would involv
 The Universal Data Extractor + Analyzer is envisioned to evolve with expanded file type support (images, DOCX, XLSX, web links), more advanced AI extraction and analysis capabilities (complex tables, handwriting recognition, sentiment analysis, trend identification), enhanced user customization, and integration options via an API.
 
 This project aims to set a high standard in AI-powered data processing, delivering a robust, reliable, and user-centric solution.
+
+
+
+## Testing
+
+This project includes a comprehensive test suite to ensure code quality and reliability. Tests are managed and run using `pytest` and `pytest-cov` for coverage, orchestrated via a `Makefile`.
+
+### Running Tests Locally
+
+All test commands should be run from the root of the `universal_data_extractor_analyzer_impl` directory, where the `Makefile` is located.
+
+1.  **Ensure Dependencies are Installed:**
+    Make sure you have all the project dependencies and testing tools installed. Refer to the main project setup instructions. You will need `pytest` and `pytest-cov`.
+    ```bash
+    pip install -r backend/requirements.txt
+    pip install pytest pytest-cov
+    ```
+
+2.  **Run All Tests:**
+    To execute the entire test suite (unit, integration, API, and agent tests) and generate a coverage report in the terminal:
+    ```bash
+    make test
+    ```
+
+3.  **Run Specific Test Suites:**
+    You can run specific categories of tests using the following commands:
+    *   Unit Tests: `make test-unit`
+    *   Integration Tests: `make test-integration`
+    *   API Tests: `make test-api`
+    *   AI Agent Tests: `make test-agents`
+
+4.  **View Coverage Reports:**
+    After running tests with `make test` (or any specific suite), coverage reports are generated:
+    *   **Terminal Output:** A summary is printed directly to the console.
+    *   **HTML Report:** A detailed HTML report is generated in `backend/cov_html/index.html`. Open this file in a browser to explore coverage line by line.
+    *   **XML Report:** An XML report is generated at `backend/coverage.xml`, which can be used by CI tools or other coverage processors.
+
+5.  **Clean Test Artifacts:**
+    To remove `pytest` cache, `__pycache__` directories, and coverage files:
+    ```bash
+    make clean
+    ```
+
+### Continuous Integration (CI)
+
+A GitHub Actions workflow is set up in `.github/workflows/main.yml`. This workflow automatically runs all tests on every push to the `main` branch and any branch starting with `feature/`, as well as on pull requests targeting `main`.
+
+*   **Workflow:** The CI workflow installs dependencies, runs `make test`, and then uploads the coverage reports (HTML and XML) as build artifacts.
+*   **Artifacts:** You can download the coverage reports from the "Artifacts" section of the completed GitHub Actions run for detailed inspection.
+
+By ensuring all tests pass before committing and pushing code, we maintain a high standard of quality for the project.

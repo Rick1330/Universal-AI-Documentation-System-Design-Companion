@@ -1,18 +1,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from ..core.config import settings
+import os # Import os module
 
-if settings.POSTGRES_SERVER and settings.POSTGRES_USER and settings.POSTGRES_PASSWORD and settings.POSTGRES_DB:
-    settings.SQLALCHEMY_DATABASE_URI = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}/{settings.POSTGRES_DB}"
+from app.core.config import settings # Corrected import
+
+# Check if running under pytest
+if os.getenv("RUNNING_PYTEST") == "true":
+    SQLALCHEMY_DATABASE_URL = "sqlite:///./test_db.db"
+    engine = create_engine(
+        SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    )
 else:
-    # Fallback to SQLite if not all PostgreSQL settings are provided (for local dev without full setup)
-    settings.SQLALCHEMY_DATABASE_URI = "sqlite:///./test.db"
-    print("Warning: PostgreSQL credentials not fully provided, falling back to SQLite for DB.")
+    # Construct PostgreSQL URI from settings if not fully provided
+    if settings.SQLALCHEMY_DATABASE_URI:
+        SQLALCHEMY_DATABASE_URL = settings.SQLALCHEMY_DATABASE_URI
+    else:
+        SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}/{settings.POSTGRES_DB}"
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
-engine = create_engine(
-    settings.SQLALCHEMY_DATABASE_URI, 
-    # connect_args={"check_same_thread": False} # Only for SQLite
-)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():

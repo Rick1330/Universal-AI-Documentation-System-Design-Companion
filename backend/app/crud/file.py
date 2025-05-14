@@ -1,20 +1,16 @@
 from sqlalchemy.orm import Session
-from ..db import models
-from ..schemas import file as file_schema # Renamed to avoid conflict
+from app.db import models
+from app.schemas.file import UploadedFileCreate # Corrected import
 
-
-def get_uploaded_file(db: Session, file_id: int):
-    return db.query(models.UploadedFile).filter(models.UploadedFile.id == file_id).first()
-
-def create_uploaded_file(db: Session, file_in: file_schema.UploadedFileCreate):
-    db_file = models.UploadedFile(
-        filename=file_in.filename,
-        original_filename=file_in.original_filename,
-        content_type=file_in.content_type,
-        file_path=file_in.file_path
-    )
+def create_uploaded_file(db: Session, *, file_in: UploadedFileCreate) -> models.UploadedFile:
+    db_file = models.UploadedFile(**file_in.model_dump())
     db.add(db_file)
     db.commit()
     db.refresh(db_file)
     return db_file
+
+def get_uploaded_file(db: Session, file_id: int) -> models.UploadedFile | None:
+    return db.query(models.UploadedFile).filter(models.UploadedFile.id == file_id).first()
+
+# Add other CRUD operations for UploadedFile if needed (e.g., list, delete)
 
