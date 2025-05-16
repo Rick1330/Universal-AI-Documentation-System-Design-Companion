@@ -17,7 +17,7 @@ COPY pyproject.toml poetry.lock* ./
 
 # Install project dependencies
 # --no-root: Do not install the project itself, only dependencies
-RUN poetry install --no-root --no-interaction --no-ansi
+RUN python -m poetry install --no-root --no-interaction --no-ansi
 
 # Create a new stage for the final image
 FROM python:3.11-slim
@@ -38,11 +38,11 @@ COPY app /app/app
 COPY README.md /app/
 
 # Install the project itself using poetry
-RUN pip install --no-cache-dir poetry==1.8.2 && poetry install --no-interaction --no-ansi --only main
+RUN pip install --no-cache-dir poetry==1.8.2 && python -m poetry install --no-interaction --no-ansi --only main
 
 # Expose port 8000
 EXPOSE 8000
 
 # Command to run the application
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
