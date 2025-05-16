@@ -6,3 +6,4 @@
 - [x] P1-T1: Initialize FastAPI project structure with Poetry
 - [x] P1-T2: Setup Dockerfile and docker-compose.yml for local development
 - [x] Add GitHub Actions workflow for Docker validation
+- [x] P1-T3: Define initial PostgreSQL schema (jobs, uploaded_files) with SQLAlchemy
