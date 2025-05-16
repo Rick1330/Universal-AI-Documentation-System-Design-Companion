@@ -1,0 +1,6 @@
+- [x] Review README.md
+- [x] Review files in docs/ directory
+- [x] Review agent descriptions
+- [x] Review development guide (if any)
+- [x] Review codebase (high-level survey)
+- [x] P1-T1: Initialize FastAPI project structure with Poetry
