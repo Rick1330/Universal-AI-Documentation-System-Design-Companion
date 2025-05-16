@@ -4,3 +4,5 @@
 - [x] Review development guide (if any)
 - [x] Review codebase (high-level survey)
 - [x] P1-T1: Initialize FastAPI project structure with Poetry
+- [x] P1-T2: Setup Dockerfile and docker-compose.yml for local development
+- [x] Add GitHub Actions workflow for Docker validation

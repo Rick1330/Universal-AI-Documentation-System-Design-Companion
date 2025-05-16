@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/app # Mount the app directory for live reloading during development
+    environment:
+      # Add any necessary environment variables here
+      # EXAMPLE_VAR: example_value
+      PYTHONUNBUFFERED: 1 # Recommended for Docker logging
+    # depends_on: # Uncomment and add services as they are added
+      # - db
+      # - broker
+      # - object_storage
+
+  # Placeholder for PostgreSQL database service
+  # db:
+  #   image: postgres:15
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data/
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: app_db
+
+  # Placeholder for Message Broker (e.g., RabbitMQ or Redis)
+  # broker:
+  #   image: rabbitmq:3-management # or redis:latest
+  #   ports:
+  #     - "5672:5672" # RabbitMQ
+  #     - "15672:15672" # RabbitMQ Management UI
+      # - "6379:6379" # Redis
+
+  # Placeholder for Object Storage (e.g., MinIO)
+  # object_storage:
+  #   image: minio/minio
+  #   ports:
+  #     - "9000:9000" # MinIO API
+  #     - "9001:9001" # MinIO Console
+  #   volumes:
+  #     - minio_data:/data
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: minioadmin
+  #   command: server /data --console-address ":9001"
+
+# volumes: # Uncomment and define volumes as services are added
+#   postgres_data:
+#   minio_data:
+
