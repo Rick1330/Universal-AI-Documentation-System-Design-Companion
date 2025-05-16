@@ -22,6 +22,9 @@ jobs:
         run: docker build -t backend-test -f ./backend/Dockerfile ./backend
         working-directory: . # Set working directory to root where docker-compose.yml is
 
+      - name: Install Docker Compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
       - name: Run Docker Compose services
         run: docker-compose -f docker-compose.yml up -d --build
         working-directory: . # Set working directory to root
