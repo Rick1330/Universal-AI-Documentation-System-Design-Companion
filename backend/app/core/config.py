@@ -8,9 +8,9 @@ class Settings(BaseSettings):
 
     # PostgreSQL Database
     POSTGRES_SERVER: str = "localhost"
-    POSTGRES_USER: str = "your_db_user"
-    POSTGRES_PASSWORD: str = "your_db_password"
-    POSTGRES_DB: str = "udea_db"
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgres"
+    POSTGRES_DB: str = "app"
     SQLALCHEMY_DATABASE_URI: Optional[str] = None
 
     # MinIO Object Storage
@@ -24,8 +24,10 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
 
-    # OpenAI API Key (or other LLM provider)
+    # AI API Keys
     OPENAI_API_KEY: str = "your_openai_api_key_here"
+    GEMINI_API_KEY: str = ""
+    AI_PROVIDER: str = "gemini"  # Options: "openai", "gemini"
 
     # Logging Configuration
     LOG_LEVEL: str = "INFO" # DEBUG, INFO, WARNING, ERROR, CRITICAL
