@@ -1,20 +1,23 @@
 import pytest
 import asyncio
+import os
+import pathlib
 from unittest.mock import patch, AsyncMock, MagicMock
 from backend.app.services import file_handler # Adjusted import
 from backend.app.core.config import settings
 
-# Mock file paths and content for testing
-VALID_FILE_PATH = "/home/ubuntu/universal_data_extractor_analyzer_impl/backend/tests/unit/test_data/sample.txt"
-INVALID_FILE_PATH = "/home/ubuntu/universal_data_extractor_analyzer_impl/backend/tests/unit/test_data/non_existent_file.txt"
-EMPTY_FILE_PATH = "/home/ubuntu/universal_data_extractor_analyzer_impl/backend/tests/unit/test_data/empty.txt"
+# Use relative paths for test files
+BASE_DIR = pathlib.Path(__file__).parent
+TEST_DATA_DIR = BASE_DIR / "test_data"
+VALID_FILE_PATH = str(TEST_DATA_DIR / "sample.txt")
+INVALID_FILE_PATH = str(TEST_DATA_DIR / "non_existent_file.txt")
+EMPTY_FILE_PATH = str(TEST_DATA_DIR / "empty.txt")
 
 @pytest.fixture(scope="module", autouse=True)
 def create_sample_files():
-    test_data_dir = "/home/ubuntu/universal_data_extractor_analyzer_impl/backend/tests/unit/test_data"
-    # Ensure the directory exists (it should have been created by a previous step)
+    # Ensure the directory exists using relative paths
     import os
-    os.makedirs(test_data_dir, exist_ok=True)
+    os.makedirs(TEST_DATA_DIR, exist_ok=True)
 
     with open(VALID_FILE_PATH, "w") as f:
         f.write("This is a test file.")
