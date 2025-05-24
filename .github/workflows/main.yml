@@ -41,4 +41,20 @@ jobs:
           backend/cov_html/
       # Optionally, only upload if the previous step was successful
       if: success() || failure()
+      
+    # Docker Compose setup and execution
+    - name: Set up Docker Compose
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose-plugin
+        docker compose version
+        
+    - name: Run Docker Compose services
+      run: |
+        docker compose -f docker-compose.yml up -d --build
+      # Only run if the test step was successful
+      if: success()
 
