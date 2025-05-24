@@ -43,18 +43,19 @@ jobs:
       if: success() || failure()
       
     # Docker Compose setup and execution
-    - name: Set up Docker Compose
+    - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       
     - name: Install Docker Compose
       run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose-plugin
-        docker compose version
+        # Install Docker Compose using the official script
+        sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.6/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
         
     - name: Run Docker Compose services
       run: |
-        docker compose -f docker-compose.yml up -d --build
+        docker-compose -f docker-compose.yml up -d --build
       # Only run if the test step was successful
       if: success()
 
