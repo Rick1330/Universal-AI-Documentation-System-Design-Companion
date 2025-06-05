@@ -7,3 +7,5 @@
 - [x] P1-T2: Setup Dockerfile and docker-compose.yml for local development
 - [x] Add GitHub Actions workflow for Docker validation
 - [x] P1-T3: Define initial PostgreSQL schema (jobs, uploaded_files) with SQLAlchemy
+- [x] P1-T4: Setup Alembic for database migrations
+- [x] P1-T5: Implement initial Alembic migration scripts and documentation
